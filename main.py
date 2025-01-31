@@ -6,7 +6,7 @@ dataset = r"C:\Users\usuar\Documents\IBM\cursos_python\analyzing_data_with_pytho
 # Load data and store in dataframe df:
 df = pd.read_csv(dataset, header=None)
 
-# Add headers to the dataframe
+# Add headers to the dataframegit
 headers = [
     "symboling",
     "normalized-losses",
@@ -36,8 +36,13 @@ headers = [
     "price",
 ]
 
-
+# Add headers to the dataframe
 df.columns = headers
 
+# Replace "?" to NaN
+df1 = df.replace("?", "NaN")
 
-print(df.head(5))
+# Drop missing values along the column "price"
+df = df1.dropna(subset=["price"], axis=0)
+
+print(df.head(10))

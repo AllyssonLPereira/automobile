@@ -91,3 +91,15 @@ df[["normalized-losses"]] = df[["normalized-losses"]].astype("int")
 df[["price"]] = df[["price"]].astype("float")
 df[["peak-rpm"]] = df[["peak-rpm"]].astype("float")
 
+
+### Data standardization
+
+# Convert mpg to L/100km by mathematical operation (235 divided by mpg)
+df["city-L/100Km"] = 235/df["city-mpg"]
+
+# replace (original value) by (original value)/(maximum value)
+df["length"] = df["length"]/df["length"].max()
+df["heigth"] = df["heigth"]/df["heigth"].max()
+df["width"] = df["width"]/df["width"].max()
+
+print(df[["length","width","height"]].head())

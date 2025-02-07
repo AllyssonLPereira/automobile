@@ -48,36 +48,39 @@ missing_data = df.isnull()
 
 ### Dealing with missing data by replacing it with the mean
 
+
 # Calculate the mean value for 'normalized-losses' column
 avg_norm_loss = df["normalized-losses"].astype('float').mean(axis=0)
 
 # Replace "NaN" by mean value in "normalized-losses" column
-df["normalized-losses"].replace(np.nan, avg_norm_loss, inplace=True)
+df["normalized-losses"] = df["normalized-losses"].replace(np.nan, avg_norm_loss)
 
 # Calculate the mean value for 'bore' column
-avg_bore=df['bore'].astype('float').mean(axis=0)
+avg_bore = df["bore"].astype('float').mean(axis=0)
 
 # Replace "NaN" by mean value in "bore" column
-df["bore"].replace(np.nan, avg_bore, inplace=True)
+df["bore"] = df["bore"].replace(np.nan, avg_bore)
 
 # Calculate the mean value for 'stroke' column
 avg_horsepower = df['horsepower'].astype('float').mean(axis=0)
 
 # Replace "NaN" by mean value in "horsepower" column
-df['horsepower'].replace(np.nan, avg_horsepower, inplace=True)
+df['horsepower'] = df['horsepower'].replace(np.nan, avg_horsepower)
 
 # Calculate the mean value for 'peak-rpm' column
-avg_peakrpm=df['peak-rpm'].astype('float').mean(axis=0)
+avg_peakrpm = df['peak-rpm'].astype('float').mean(axis=0)
 
 # Replace "NaN" by mean value in "peak-rpm" column
-df['peak-rpm'].replace(np.nan, avg_peakrpm, inplace=True)
+df['peak-rpm'] = df['peak-rpm'].replace(np.nan, avg_peakrpm)
 
 # Check the most common type
 # print(df['num-of-doors'].value_counts().idxmax()) --> "four"
 
-df["num-of-doors"].replace(np.nan, "four", inplace=True)
+df["num-of-doors"] = df["num-of-doors"].replace(np.nan, "four")
 
-# Eliminate the missing lines as this will be the target for making the prediction
+
+### Eliminate the missing lines as this will be the target for making the prediction
+
 
 # Simply drop whole row with NaN in "price" column
 df.dropna(subset=["price"], axis=0, inplace=True)
@@ -88,6 +91,7 @@ df.reset_index(drop=True, inplace=True)
 
 ### Dealing with data types in the wrong format
 
+
 df[["bore", "stroke"]] = df[["bore", "stroke"]].astype("float")
 df[["normalized-losses"]] = df[["normalized-losses"]].astype("int")
 df[["price"]] = df[["price"]].astype("float")
@@ -95,6 +99,7 @@ df[["peak-rpm"]] = df[["peak-rpm"]].astype("float")
 
 
 ### Data standardization
+
 
 # Convert mpg to L/100km by mathematical operation (235 divided by mpg)
 df["city-L/100Km"] = 235/df["city-mpg"]
@@ -106,6 +111,7 @@ df["width"] = df["width"]/df["width"].max()
 
 
 ### Binning
+
 
 df["horsepower"] = df["horsepower"].astype(int, copy=True)
 
@@ -125,3 +131,6 @@ df["horsepower-binned"] = pd.cut(df["horsepower"], bins, labels=group_names, inc
 # print(df[['horsepower','horsepower-binned']].head(20))
 # print(df["horsepower-binned"].value_counts())
 
+df_test = df[["drive-wheels", "body-style", "price"]]
+df_grp = df_test.groupby(["drive-wheels", "body-style"], as_index=False).mean()
+print(df_grp)
